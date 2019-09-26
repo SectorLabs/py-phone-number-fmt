@@ -4,6 +4,7 @@ from typing import Optional, Union
 
 import phonenumbers
 
+from phonenumbers import PhoneNumberFormat
 from phonenumbers.phonenumberutil import NumberParseException
 
 from .country import dialing_prefix_for_region
@@ -25,7 +26,9 @@ def _is_valid(phone_number: str) -> bool:
 
 
 def format_phone_number(
-    phone_number: Union[str, int], implied_phone_region: str
+    phone_number: Union[str, int],
+    implied_phone_region: str,
+    fmt: PhoneNumberFormat = PhoneNumberFormat.E164,
 ) -> Optional[str]:
     """Formats/validates the specified phone number.
 
@@ -81,9 +84,7 @@ def format_phone_number(
             continue
 
         phone_number = str(
-            phonenumbers.format_number(
-                phonenumbers.parse(variant), phonenumbers.PhoneNumberFormat.E164
-            )
+            phonenumbers.format_number(phonenumbers.parse(variant), fmt)
         )
 
         if len(phone_number) <= 16:
