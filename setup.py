@@ -75,14 +75,7 @@ setup(
                     "phonenumberfmt",
                     "tests",
                 ],
-                [
-                    "autopep8",
-                    "-i",
-                    "-r",
-                    "setup.py",
-                    "phonenumberfmt",
-                    "tests",
-                ],
+                ["autopep8", "-i", "-r", "setup.py", "phonenumberfmt", "tests"],
             ],
         ),
         "format": create_command(
