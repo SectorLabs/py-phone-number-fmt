@@ -21,3 +21,12 @@ Google's libphonenumber on steroids. Tries all sorts of crazy combinations in an
     # to be local
     result = format_phone_number('778\173 0.92', implied_phone_region='RO')
     assert result == '+40778173092'
+
+The resulting phone number will be formatted according to the E.164 standard. Want to change the output format? Pass the third, optional parameter `fmt` with a valid member of `phonenumbers.NumberFormat`:
+
+    from phonenumbers import NumberFormat
+    result = format_phone_number(
+        '778\173 0.92',
+        implied_phone_region='RO',
+        fmt=NumberFormat.INTERNATIONAL, # default is NumberFormat.E164
+    )
