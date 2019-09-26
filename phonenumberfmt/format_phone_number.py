@@ -1,6 +1,7 @@
 import re
 
 from typing import Optional, Union
+from urllib.parse import unquote
 
 import phonenumbers
 
@@ -70,7 +71,15 @@ def format_phone_number(
 
     variants = []
     for number in [phone_number, *re.split("/|,", phone_number)]:
-        cleaned_number = "".join(re.findall("[0-9+]+", number))
+        try:
+            unquoted_number = unquote(number)
+        except Exception:
+            unquoted_number = number
+
+        variants.append(unquoted_number.split("#", maxsplit=1)[0])
+        variants.append(unquoted_number.split(":", maxsplit=1)[0])
+
+        cleaned_number = "".join(re.findall("[0-9+]+", unquoted_number))
         variants.append(cleaned_number)
         variants.append("+%s" % cleaned_number)
         if cleaned_number.startswith("00"):
