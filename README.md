@@ -4,6 +4,8 @@
 [![PyPi](https://badge.fury.io/py/py-phone-number-fmt.svg)](https://pypi.python.org/pypi/py-phone-number-fmt)
 [![CircleCI](https://circleci.com/gh/SectorLabs/py-phone-number-fmt/tree/master.svg?style=svg&circle-token=134c614a21ff3a5ca674d34d67d3b65b429b86d8)](https://circleci.com/gh/SectorLabs/py-phone-number-fmt/tree/master)
 
+Sanitize, validate and format phone numbers into E.164 valid phone numbers.
+
 Google's libphonenumber on steroids. Tries all sorts of crazy combinations in an attempt to create a valid phone number. Useful for those of us who have to deal with poorly sanitized data.
 
 [See the list of test cases](./tests/test_format_phone_number.py)

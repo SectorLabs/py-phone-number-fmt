@@ -40,7 +40,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     license="MIT License",
-    description="Google's libphonenumber on steroids.",
+    description="Sanitize, validate and format phone numbers into E.164 valid phone numbers.",
     long_description=README,
     long_description_content_type="text/markdown",
     url="https://github.com/SectorLabs/py-phone-number-fmt",
