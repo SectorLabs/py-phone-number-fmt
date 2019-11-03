@@ -41,6 +41,7 @@ from phonenumberfmt.country import dialing_prefix_for_region
         ("%2b97144298820", "+97144298820"),
         ("+97144220125#40,+971503292710#40", "+97144220125"),
         ("+97144220125:40,+971503292710:40", "+97144220125"),
+        ("+92-3002125421 +92-312-8222973", "+923002125421"),
     ],
 )
 def test_format_phone_number(phone_region, input, output):

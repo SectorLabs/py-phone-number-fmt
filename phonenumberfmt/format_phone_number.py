@@ -70,7 +70,11 @@ def format_phone_number(
     dialing_prefix = dialing_prefix_for_region(implied_phone_region) or ""
 
     variants = []
-    for number in [phone_number, *re.split("/|,", phone_number)]:
+    for number in [
+        phone_number,
+        *re.split("/|,", phone_number),
+        *phone_number.split(" "),
+    ]:
         try:
             unquoted_number = unquote(number)
         except Exception:
