@@ -1,29 +1,8 @@
-import re
-
 from typing import Optional, Union
-from urllib.parse import unquote
-
-import phonenumbers
 
 from phonenumbers import PhoneNumberFormat
-from phonenumbers.phonenumberutil import NumberParseException
 
-from .country import dialing_prefix_for_region
-
-
-def _is_valid(phone_number: str) -> bool:
-    """Gets whether the specified phone number is a valid one."""
-    try:
-        parsed_number = phonenumbers.parse(phone_number)
-        if phonenumbers.is_possible_number(parsed_number) is True:
-            return True
-
-        if phonenumbers.is_valid_number(parsed_number) is True:
-            return True
-    except NumberParseException:
-        pass
-
-    return False
+from .format_phone_number_list import format_phone_number_list
 
 
 def format_phone_number(
@@ -62,48 +41,10 @@ def format_phone_number(
     method doesn't find a phone number valid, then it must really
     not be a valid number.
     """
-    phone_number = str(phone_number)
-
-    if not phone_number or len(phone_number) < 3:
-        return None
-
-    dialing_prefix = dialing_prefix_for_region(implied_phone_region) or ""
-
-    variants = []
-    for number in [
-        phone_number,
-        *re.split("/|,", phone_number),
-        *phone_number.split(" "),
-    ]:
-        try:
-            unquoted_number = unquote(number)
-        except Exception:
-            unquoted_number = number
-
-        variants.append(unquoted_number.split("#", maxsplit=1)[0])
-        variants.append(unquoted_number.split(":", maxsplit=1)[0])
-
-        cleaned_number = "".join(re.findall("[0-9+]+", unquoted_number))
-        variants.append(cleaned_number)
-        variants.append("+%s" % cleaned_number)
-        if cleaned_number.startswith("00"):
-            variants.append("+%s" % cleaned_number.replace("00", "", 1))
-        variants.append("%s%s" % (dialing_prefix, cleaned_number))
-        variants.append("%s%s" % (dialing_prefix, cleaned_number[1:]))
-        variants.append("%s%s" % (dialing_prefix, cleaned_number[2:]))
-
-    for variant in variants:
-        if not _is_valid(variant):
-            continue
-
-        phone_number = str(
-            phonenumbers.format_number(phonenumbers.parse(variant), fmt)
-        )
-
-        if len(phone_number) <= 16:
-            return phone_number
-
-    return None
+    valid_phone_numbers = format_phone_number_list(
+        phone_number, implied_phone_region, fmt
+    )
+    return valid_phone_numbers[0] if len(valid_phone_numbers) > 0 else None
 
 
 __all__ = ["format_phone_number"]
