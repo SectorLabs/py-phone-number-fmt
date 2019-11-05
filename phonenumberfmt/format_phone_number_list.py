@@ -1,7 +1,7 @@
 import collections
 import re
 
-from typing import List, Union
+from typing import List, Optional, Union
 from urllib.parse import unquote
 
 import phonenumbers
@@ -78,75 +78,64 @@ def format_phone_number_list(
             unquoted_number = unquote(number)
         except Exception:
             unquoted_number = number
-        valid_numbers = []
-        _append_valid_number(
-            valid_numbers,
-            unquoted_number.split("#", maxsplit=1)[0],
-            dialing_prefix,
-            fmt,
-        )
-        _append_valid_number(
-            valid_numbers,
-            unquoted_number.split(":", maxsplit=1)[0],
-            dialing_prefix,
-            fmt,
-        )
-
         cleaned_number = "".join(re.findall("[0-9+]+", unquoted_number))
-        _append_valid_number(valid_numbers, cleaned_number, dialing_prefix, fmt)
-        _append_valid_number(
-            valid_numbers, "+%s" % cleaned_number, dialing_prefix, fmt
+        variants_without_dialing = _create_variants_without_dialing(
+            unquoted_number
         )
-        if cleaned_number.startswith("00"):
-            _append_valid_number(
-                valid_numbers,
-                "+%s" % cleaned_number.replace("00", "", 1),
-                dialing_prefix,
-                fmt,
-            )
-        if len(valid_numbers) == 0 and not _is_already_contained(
-            valid_phone_numbers, cleaned_number
-        ):
-            _append_valid_number(
-                valid_numbers,
-                "%s%s" % (dialing_prefix, cleaned_number),
-                dialing_prefix,
-                fmt,
-            )
-            if len(valid_numbers) == 0:
-                _append_valid_number(
-                    valid_numbers,
-                    "%s%s" % (dialing_prefix, cleaned_number[1:]),
-                    dialing_prefix,
-                    fmt,
-                )
-            if len(valid_numbers) == 0:
-                _append_valid_number(
-                    valid_numbers,
-                    "%s%s" % (dialing_prefix, cleaned_number[2:]),
-                    dialing_prefix,
-                    fmt,
-                )
-
-        for valid_number in valid_numbers:
+        valid_number = _get_first_valid_number(
+            variants_without_dialing, dialing_prefix, fmt
+        )
+        if valid_number:
             valid_phone_numbers[valid_number] = valid_number
+            continue
+        if not _is_already_contained(valid_phone_numbers, cleaned_number):
+            variants_with_dialing = _create_variants_with_dialing(
+                cleaned_number, dialing_prefix
+            )
+            valid_number = _get_first_valid_number(
+                variants_with_dialing, dialing_prefix, fmt
+            )
+            if valid_number:
+                valid_phone_numbers[valid_number] = valid_number
 
     return list(valid_phone_numbers.keys())
 
 
-def _append_valid_number(
-    valid_numbers: list,
-    variant: str,
+def _create_variants_without_dialing(number: str):
+    variants = [
+        number.split("#", maxsplit=1)[0],
+        number.split(":", maxsplit=1)[0],
+    ]
+    cleaned_number = "".join(re.findall("[0-9+]+", number))
+    variants.append(cleaned_number)
+    variants.append("+%s" % cleaned_number)
+    if cleaned_number.startswith("00"):
+        variants.append("+%s" % cleaned_number.replace("00", "", 1))
+    return variants
+
+
+def _create_variants_with_dialing(cleaned_number: str, dialing_prefix: str):
+    return [
+        "%s%s" % (dialing_prefix, cleaned_number),
+        "%s%s" % (dialing_prefix, cleaned_number[1:]),
+        "%s%s" % (dialing_prefix, cleaned_number[2:]),
+    ]
+
+
+def _get_first_valid_number(
+    variants: List[str],
     dialing_prefix: str,
     fmt: PhoneNumberFormat = PhoneNumberFormat.E164,
-) -> None:
-    if not _is_valid(variant, dialing_prefix):
-        return None
-    phone_number = str(
-        phonenumbers.format_number(phonenumbers.parse(variant), fmt)
-    )
-    if len(phone_number) <= 16:
-        valid_numbers.append(phone_number)
+) -> Optional[str]:
+    for variant in variants:
+        if not _is_valid(variant, dialing_prefix):
+            continue
+        phone_number = str(
+            phonenumbers.format_number(phonenumbers.parse(variant), fmt)
+        )
+        if len(phone_number) <= 16:
+            return phone_number
+    return None
 
 
 def _is_already_contained(
