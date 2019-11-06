@@ -69,15 +69,8 @@ def format_phone_number_list(
     dialing_prefix = dialing_prefix_for_region(implied_phone_region) or ""
 
     valid_phone_numbers = collections.OrderedDict()
-    for number in [
-        phone_number,
-        *re.split(r"/|,", phone_number),
-        *phone_number.split(" "),
-    ]:
-        try:
-            unquoted_number = unquote(number)
-        except Exception:
-            unquoted_number = number
+    for number in _split_phone_numbers(phone_number):
+        unquoted_number = _get_unquoted_number(number)
         cleaned_number = "".join(re.findall("[0-9+]+", unquoted_number))
         variants_without_dialing = _create_variants_without_dialing(
             unquoted_number
@@ -101,7 +94,22 @@ def format_phone_number_list(
     return list(valid_phone_numbers.keys())
 
 
-def _create_variants_without_dialing(number: str):
+def _get_unquoted_number(number: str) -> str:
+    try:
+        return unquote(number)
+    except Exception:
+        return number
+
+
+def _split_phone_numbers(phone_number: str) -> List[str]:
+    return [
+        phone_number,
+        *re.split(r"/|,", phone_number),
+        *phone_number.split(" "),
+    ]
+
+
+def _create_variants_without_dialing(number: str) -> List[str]:
     variants = [
         number.split("#", maxsplit=1)[0],
         number.split(":", maxsplit=1)[0],
@@ -114,7 +122,9 @@ def _create_variants_without_dialing(number: str):
     return variants
 
 
-def _create_variants_with_dialing(cleaned_number: str, dialing_prefix: str):
+def _create_variants_with_dialing(
+    cleaned_number: str, dialing_prefix: str
+) -> List[str]:
     return [
         "%s%s" % (dialing_prefix, cleaned_number),
         "%s%s" % (dialing_prefix, cleaned_number[1:]),
