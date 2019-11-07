@@ -16,6 +16,7 @@ Google's libphonenumber on steroids. Tries all sorts of crazy combinations in an
 
 ## Usage
 
+### Retrieve first valid number
     from phonenumberfmt import format_phone_number
 
     # implied phone region is the country of which to
@@ -23,6 +24,13 @@ Google's libphonenumber on steroids. Tries all sorts of crazy combinations in an
     # to be local
     result = format_phone_number('778\173 0.92', implied_phone_region='RO')
     assert result == '+40778173092'
+
+### Retrieve all valid numbers
+    # implied phone region is the country of which to
+    # use the dialing prefix in case the number appears
+    # to be local
+    result = format_phone_number_list('+40773818041 / +97172273000', implied_phone_region='RO')
+    assert result == ['+40778173092', '+97172273000']
 
 The resulting phone number will be formatted according to the E.164 standard. Want to change the output format? Pass the third, optional parameter `fmt` with a valid member of `phonenumbers.NumberFormat`:
 
