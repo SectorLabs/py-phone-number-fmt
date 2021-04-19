@@ -7,7 +7,7 @@ jobs:
             - checkout
             - run:
                 name: Install packages
-                command: apk add gcc musl-dev git
+                command: apk add gcc musl-dev git openssh-client
             - run:
                 name: Install Python packages
                 command: pip install -r requirements.txt
@@ -22,7 +22,7 @@ jobs:
             - checkout
             - run:
                 name: Install packages
-                command: apk add gcc musl-dev git
+                command: apk add gcc musl-dev git openssh-client
             - run:
                 name: Install Python packages
                 command: pip install -r requirements.txt
@@ -37,7 +37,7 @@ jobs:
             - checkout
             - run:
                 name: Install packages
-                command: apk add gcc musl-dev git
+                command: apk add gcc musl-dev git openssh-client
             - run:
                 name: Install Python packages
                 command: pip install -r requirements.txt
@@ -52,7 +52,7 @@ jobs:
             - checkout
             - run:
                 name: Install packages
-                command: apk add gcc musl-dev git
+                command: apk add gcc musl-dev git openssh-client
             - run:
                 name: Install Python packages
                 command: pip install -r requirements.txt
