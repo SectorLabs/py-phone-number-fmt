@@ -17,7 +17,7 @@ jobs:
 
     test-python38:
         docker:
-            - image: python:3.8-rc-alpine
+            - image: python:3.8-alpine
         steps:
             - checkout
             - run:
@@ -30,9 +30,24 @@ jobs:
                 name: Run tests
                 command: tox -e 'py38'
 
+    test-python39:
+        docker:
+            - image: python:3.9-alpine
+        steps:
+            - checkout
+            - run:
+                name: Install packages
+                command: apk add gcc musl-dev git
+            - run:
+                name: Install Python packages
+                command: pip install -r requirements.txt
+            - run:
+                name: Run tests
+                command: tox -e 'py39'
+
     analysis:
         docker:
-            - image: python:3.7-alpine
+            - image: python:3.8-alpine
         steps:
             - checkout
             - run:
@@ -55,4 +70,5 @@ workflows:
         jobs:
             - test-python37
             - test-python38
+            - test-python39
             - analysis
