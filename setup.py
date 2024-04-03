@@ -47,7 +47,7 @@ setup(
     author="Sector Labs",
     author_email="open-source@sectorlabs.ro",
     keywords=["phone number", "phone", "formatting", "validation"],
-    install_requires=["phonenumbers==8.13.33"],
+    install_requires=["phonenumbers>=8.13.33,<9.0.0"],
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
