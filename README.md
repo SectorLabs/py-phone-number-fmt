@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
 [![PyPi](https://badge.fury.io/py/py-phone-number-fmt.svg)](https://pypi.python.org/pypi/py-phone-number-fmt)
-[![CircleCI](https://circleci.com/gh/SectorLabs/py-phone-number-fmt/tree/master.svg?style=svg&circle-token=134c614a21ff3a5ca674d34d67d3b65b429b86d8)](https://circleci.com/gh/SectorLabs/py-phone-number-fmt/tree/master)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/SectorLabs/py-phone-number-fmt/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/SectorLabs/py-phone-number-fmt/tree/master)
 
 Sanitize, validate and format phone numbers into E.164 valid phone numbers.
 
