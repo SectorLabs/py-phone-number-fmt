@@ -1,7 +1,7 @@
 -e .
 
 coverage==4.5.3
-pytest==4.5.0
+pytest>=4.5.0
 pytest-cov==2.7.1
 tox==3.11.1
 docformatter==1.3

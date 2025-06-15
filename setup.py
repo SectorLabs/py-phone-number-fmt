@@ -36,7 +36,7 @@ with open(
 
 setup(
     name="py-phone-number-fmt",
-    version="2.0.0",
+    version="2.0.1",
     packages=find_packages(),
     include_package_data=True,
     license="MIT License",
@@ -47,7 +47,7 @@ setup(
     author="Sector Labs",
     author_email="open-source@sectorlabs.ro",
     keywords=["phone number", "phone", "formatting", "validation"],
-    install_requires=["phonenumbers>=8.13.33,<9.0.0"],
+    install_requires=["phonenumbers>=8.13.33,<=9.0.7"],
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
